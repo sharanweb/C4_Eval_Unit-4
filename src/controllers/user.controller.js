@@ -8,7 +8,7 @@ router.get("", async(req,res)=>{
         const users = await User.find().lean().exec();
         return res.status(200).send({todos:users});
     } catch (error) {
-        return res.status(400).send({error:error.message});
+        return res.status(401).send({error:error.message});
     }
 });
 
@@ -18,7 +18,7 @@ router.post("", async(req,res)=>{
         const todos = await User.create(req.body);
         return res.status(200).send({todos:todos});
     } catch (error) {
-        return res.status(400).send({error:error.message});
+        return res.status(401).send({error:error.message});
     }
 });
 

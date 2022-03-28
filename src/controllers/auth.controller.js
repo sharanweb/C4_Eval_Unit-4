@@ -20,7 +20,7 @@ const register = async(req,res)=>{
         const token = newToken(user);
         return res.status(200).send({user,token});
     } catch (error) {
-        return res.status(400).send({error: error.message});
+        return res.status(401).send({error: error.message});
     }
 };
 
@@ -29,21 +29,21 @@ const login = async(req,res)=>{
         const user = await User.findOne({email:req.body.email});
 
         if(!user){
-            return res.status(400).send("email incorrect");
+            return res.status(401).send("email incorrect");
         }
 
         //match passowrd
         const match = user.checkPassword(req.body.password);
 
         if(!match){
-            return res.status(400).send("email/passowrd incorrect");
+            return res.status(401).send("email/passowrd incorrect");
         }
 
         //token
         const token = newToken(user);
         return res.status(200).send({user,token});
     } catch (error) {
-        return res.status(400).send({error: error.message});
+        return res.status(401).send({error: error.message});
     }
 
 }
