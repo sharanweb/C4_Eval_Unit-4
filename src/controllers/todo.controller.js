@@ -1,9 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const Todo = require("../models/todo.model");
+const authentcate = require("../middlewares/authenticate")
 
 //GET /todos endpoint that returns all todos of the logged in user
-router.get("", async(req,res)=>{
+router.get("",authenticate, async(req,res)=>{
     try {
         const todos = await Todo.find().lean().exec();
         return res.status(200).send({todos:todos});
@@ -13,7 +14,7 @@ router.get("", async(req,res)=>{
 });
 
 //POST /todos endpoint for the logged in user to create a todo
-router.post("", async(req,res)=>{
+router.post("",authenticate, async(req,res)=>{
     try {
         const todos = await Todo.create(req.body);
         return res.status(200).send({todos:todos});
@@ -23,7 +24,7 @@ router.post("", async(req,res)=>{
 });
 
 //GET /todos/:id endpoint where if the todo user is same as logged in user then
-router.get("/:id", async(req,res)=>{
+router.get("/:id",authenticate, async(req,res)=>{
     try {
         const todos = await Todo.findById(req.params.id).lean().exec();
         return res.status(200).send({todos:todos});
@@ -34,7 +35,7 @@ router.get("/:id", async(req,res)=>{
 
 //PATCH /todos/:id endpoint where if the todo user is the same as logged in user
 
-router.patch("/:id",async(req,res)=>{
+router.patch("/:id",authenticate,async(req,res)=>{
     try {
         const todos = await Todo.findByIdAndUpdate(req.params.id, req.body,{new:true});
         return res.status(200).send({todos:todos});
@@ -44,7 +45,7 @@ router.patch("/:id",async(req,res)=>{
 });
 
 //delete
-router.delete("/:id",async(req,res)=>{
+router.delete("/:id",authenticate,async(req,res)=>{
     try {
         const todos = await Todo.findByIdAndDelete(req.params.id, req.body);
         return res.status(200).send({todos:todos});
