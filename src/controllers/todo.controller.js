@@ -34,3 +34,23 @@ router.get("/:id", async(req,res)=>{
 
 //PATCH /todos/:id endpoint where if the todo user is the same as logged in user
 
+router.patch("/:id",async(req,res)=>{
+    try {
+        const todos = await Todo.findByIdAndUpdate(req.params.id, req.body,{new:true});
+        return res.status(200).send({todos:todos});
+    } catch (error) {
+        return res.status(400).send({error:error.message});
+    }
+});
+
+//delete
+router.delete("/:id",async(req,res)=>{
+    try {
+        const todos = await Todo.findByIdAndDelete(req.params.id, req.body);
+        return res.status(200).send({todos:todos});
+    } catch (error) {
+        return res.status(400).send({error:error.message});
+    }
+});
+
+module.exports = router;

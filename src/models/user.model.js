@@ -14,6 +14,16 @@ const userSchema = new mongoose.Schema(
     }
 );
 
+userSchema.pre("save", function(next){
+    const hash = bcrypt.hashSync(this.password, 8);
+    this.password = hash;
+    return next;
+});
+
+userSchema.methods.checkpassword = function(password){
+    return bcrypt.compareSync(password, this.password);
+};
+
 const User = mongoose.model("user",userSchema);
 
 module.exports = User;
